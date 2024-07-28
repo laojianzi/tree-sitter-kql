@@ -1,0 +1,15 @@
+==================
+equal match
+==================
+
+app: "name"
+
+---
+
+(source_file
+  (query
+    (field_expression
+      (field_name)
+      (operator)
+      (value
+        (string)))))
