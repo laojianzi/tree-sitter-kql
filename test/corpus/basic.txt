@@ -1,0 +1,144 @@
+==================
+Test basic match
+==================
+
+app: "name"	AND tag: trace and status > 200 AND request_time < 0.05 AND bytes_sent >= 1000 AND request_length <= 2000.03
+
+---
+
+(source
+  (boolean_expression
+    (boolean_expression
+      (boolean_expression
+        (boolean_expression
+          (boolean_expression
+            (boolean_expression
+              (field_expression
+                (field_name)
+                (operator)
+                (value
+                  (string))))
+            (keyword_and)
+            (field_expression
+              (field_name)
+              (operator)
+              (value
+                (unquote_string))))
+          (keyword_and)
+          (field_expression
+            (field_name)
+            (operator)
+            (value
+              (int))))
+        (keyword_and)
+        (field_expression
+          (field_name)
+          (operator)
+          (value
+            (float))))
+      (keyword_and)
+      (field_expression
+        (field_name)
+        (operator)
+        (value
+          (int))))
+    (keyword_and)
+    (field_expression
+      (field_name)
+      (operator)
+      (value
+        (float)))))
+
+==================
+Basic keyword
+==================
+NOT app: "name" OR app: myapp and status > 200 AND not request_time < 0.05 or request_length >= 2000 or not bytes_sent <= 1000
+---
+
+(source
+  (boolean_expression
+    (boolean_expression
+      (boolean_expression
+        (boolean_expression
+          (boolean_expression
+            (boolean_expression
+              (field_expression
+                (keyword_not)
+                (field_name)
+                (operator)
+                (value
+                  (string))))
+            (keyword_or)
+            (field_expression
+              (field_name)
+              (operator)
+              (value
+                (unquote_string))))
+          (keyword_and)
+          (field_expression
+            (field_name)
+            (operator)
+            (value
+              (int))))
+        (keyword_and)
+        (field_expression
+          (keyword_not)
+          (field_name)
+          (operator)
+          (value
+            (float))))
+      (keyword_or)
+      (field_expression
+        (field_name)
+        (operator)
+        (value
+          (int))))
+    (keyword_or)
+    (field_expression
+      (keyword_not)
+      (field_name)
+      (operator)
+      (value
+        (int)))))
+
+==================
+Error keyword or no left whitespace
+:error
+==================
+app:"name"OR app:myapp
+---
+
+==================
+Error keyword or no right whitespace
+:error
+==================
+app:"name" ORapp:myapp
+---
+
+==================
+Error keyword and no left whitespace
+:error
+==================
+app:"name"AND app:myapp
+---
+
+==================
+Error keyword and no right whitespace
+:error
+==================
+app:"name" ANDapp:myapp
+---
+
+==================
+Error keyword not no left whitespace if not in first
+:error
+==================
+app:"name"NOT app:myapp
+---
+
+==================
+Error keyword not no right whitespace
+:error
+==================
+app:"name" NOTapp:myapp
+---

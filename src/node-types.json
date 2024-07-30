@@ -1,10 +1,5 @@
 [
   {
-    "type": "boolean",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "boolean_expression",
     "named": true,
     "fields": {},
@@ -17,7 +12,15 @@
           "named": true
         },
         {
-          "type": "boolean_term",
+          "type": "field_expression",
+          "named": true
+        },
+        {
+          "type": "keyword_and",
+          "named": true
+        },
+        {
+          "type": "keyword_or",
           "named": true
         }
       ]
@@ -39,25 +42,6 @@
     }
   },
   {
-    "type": "boolean_term",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "boolean_factor",
-          "named": true
-        },
-        {
-          "type": "boolean_term",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "field_expression",
     "named": true,
     "fields": {},
@@ -67,6 +51,10 @@
       "types": [
         {
           "type": "field_name",
+          "named": true
+        },
+        {
+          "type": "keyword_not",
           "named": true
         },
         {
@@ -86,7 +74,7 @@
     "fields": {}
   },
   {
-    "type": "query",
+    "type": "source",
     "named": true,
     "fields": {},
     "children": {
@@ -98,31 +86,15 @@
           "named": true
         },
         {
+          "type": "boolean_factor",
+          "named": true
+        },
+        {
           "type": "field_expression",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "source_file",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "query",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "string",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "value",
@@ -133,31 +105,23 @@
       "required": true,
       "types": [
         {
-          "type": "boolean",
+          "type": "float",
           "named": true
         },
         {
-          "type": "number",
+          "type": "int",
           "named": true
         },
         {
           "type": "string",
           "named": true
+        },
+        {
+          "type": "unquote_string",
+          "named": true
         }
       ]
     }
-  },
-  {
-    "type": "!=",
-    "named": false
-  },
-  {
-    "type": "!~",
-    "named": false
-  },
-  {
-    "type": "\"",
-    "named": false
   },
   {
     "type": "(",
@@ -180,14 +144,6 @@
     "named": false
   },
   {
-    "type": "==",
-    "named": false
-  },
-  {
-    "type": "=~",
-    "named": false
-  },
-  {
     "type": ">",
     "named": false
   },
@@ -196,39 +152,35 @@
     "named": false
   },
   {
-    "type": "AND",
-    "named": false
-  },
-  {
-    "type": "IN",
-    "named": false
-  },
-  {
-    "type": "NOT",
-    "named": false
-  },
-  {
-    "type": "NOT IN",
-    "named": false
-  },
-  {
-    "type": "OR",
-    "named": false
-  },
-  {
-    "type": "false",
-    "named": false
-  },
-  {
     "type": "field_name",
     "named": true
   },
   {
-    "type": "number",
+    "type": "float",
     "named": true
   },
   {
-    "type": "true",
-    "named": false
+    "type": "int",
+    "named": true
+  },
+  {
+    "type": "keyword_and",
+    "named": true
+  },
+  {
+    "type": "keyword_not",
+    "named": true
+  },
+  {
+    "type": "keyword_or",
+    "named": true
+  },
+  {
+    "type": "string",
+    "named": true
+  },
+  {
+    "type": "unquote_string",
+    "named": true
   }
 ]

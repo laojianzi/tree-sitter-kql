@@ -1,36 +1,65 @@
+const digits = repeat1(/[0-9]+_?/);
+const exponent = seq(/[eE][\+-]?/, digits);
+
 module.exports = grammar({
   name: "kql",
 
   rules: {
-    source_file: ($) => $.query,
+    source: ($) => $._query,
 
-    query: ($) => choice($.boolean_expression, $.field_expression),
+    _query: ($) =>
+      seq(optional($._whitespace), choice($.boolean_factor, $.boolean_expression, $.field_expression), optional($._whitespace)),
+
+    keyword_and: (_) => /and/i,
+    keyword_or: (_) => /or/i,
+    keyword_not: (_) => /not/i,
 
     boolean_expression: ($) =>
-      choice(
-        $.boolean_term,
-        seq($.boolean_expression, "AND", $.boolean_term),
-        seq($.boolean_expression, "OR", $.boolean_term)
+      prec.left(
+        1,
+        choice(
+          $.field_expression,
+          seq($.boolean_expression, $._whitespace, $.keyword_and, $._whitespace, $.field_expression),
+          seq($.boolean_expression, $._whitespace, $.keyword_or, $._whitespace, $.field_expression)
+        )
       ),
-
-    boolean_term: ($) =>
-      choice($.boolean_factor, seq($.boolean_term, "NOT", $.boolean_factor)),
 
     boolean_factor: ($) => seq("(", $.boolean_expression, ")"),
 
-    field_expression: ($) => seq($.field_name, $.operator, $.value),
+    field_expression: ($) =>
+      seq(
+        optional(seq($.keyword_not, $._whitespace)),
+        $.field_name,
+        $.operator,
+        optional($._whitespace),
+        $.value,
+      ),
 
     field_name: ($) => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    operator: ($) =>
-      choice(":", "==", "!=", "=~", "!~", "<", ">", "<=", ">=", "IN", "NOT IN"),
+    operator: ($) => choice(":", "<", ">", "<=", ">="),
 
-    value: ($) => choice($.string, $.number, $.boolean),
+    value: ($) => choice($.string, $.int, $.float, $.unquote_string),
 
-    string: ($) => seq('"', /[^"]*/, '"'),
+    string: _ => /"[^"]*"/,
 
-    number: ($) => /-?\d+(\.\d+)?/,
+    int: (_) => {
+      return token(seq(choice(seq(digits, exponent), seq(digits))));
+    },
 
-    boolean: ($) => choice("true", "false"),
+    float: (_) => {
+      return token(
+        seq(
+          choice(
+            seq(digits, ".", optional(digits), optional(exponent)),
+            seq(optional(digits), ".", digits, optional(exponent))
+          )
+        )
+      );
+    },
+
+    unquote_string: ($) => /[a-zA-Z_][a-zA-Z0-9_]+/,
+
+    _whitespace: _ => /[\ \t\r\n\u00A0]+/
   },
 });
